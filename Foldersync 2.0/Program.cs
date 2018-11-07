@@ -28,6 +28,7 @@ namespace Foldersync
         private static extern IntPtr GetConsoleWindow();
         #endregion
 
+        private static MainMenu menu = new MainMenu();
         static void Main(string[] args)
         {
             #region Lock Console Size
@@ -52,7 +53,7 @@ namespace Foldersync
             // Set the console Title
             Console.Title = "Foldersync";
 
-            Syncer sync = new Syncer("", "", "");
+            menu.loadMenus();
         }
 
         /// <summary>

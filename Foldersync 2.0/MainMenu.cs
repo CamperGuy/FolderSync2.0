@@ -15,18 +15,48 @@ namespace Foldersync
 
         public MainMenu()
         {
-            loadMenus();
+            
         }
 
-        private void loadMenus()
+        public void loadMenus()
         {
-            foreach (var file in Directory.EnumerateFiles(settingsLocation, "*.setting"))
+            if (Directory.Exists(settingsLocation) && Directory.GetFiles(settingsLocation).Count() != 0)
             {
-                string name = File.ReadAllLines(file).ElementAtOrDefault(0);
-                string localpath = File.ReadAllLines(file).ElementAtOrDefault(1);
-                string remotepath = File.ReadAllLines(file).ElementAtOrDefault(2);
+                int amount = 0;
+                int increaser = 0;
+                foreach (var file in Directory.EnumerateFiles(settingsLocation, "*.setting"))
+                {
+                    string name = File.ReadAllLines(file).ElementAtOrDefault(0);
+                    string localpath = File.ReadAllLines(file).ElementAtOrDefault(1);
+                    string remotepath = File.ReadAllLines(file).ElementAtOrDefault(2);
 
-                modules.Add(new Syncer(name, localpath, remotepath));
+                    modules.Add(new Syncer(name, localpath, remotepath));
+                    amount++;
+                }
+                foreach (Syncer syncer in modules)
+                {
+                    if (increaser <= amount)
+                    {
+                        Console.WriteLine("[" + increaser + "] " + modules[increaser].getName());
+                        increaser++;
+                    }
+                    else
+                        break;
+                }
+                Console.ReadKey();
+            }
+            else
+            {
+                Console.WriteLine("Empty\n\n[Escape] Exit\n[Any] Create a new Link");
+                Console.Write("\n>");
+                if (Console.ReadKey().Key != ConsoleKey.Escape)
+                {
+                    Syncer name = new Syncer("", "", "");
+                    Console.Clear();
+                    name.firstTimeSetup();
+                }
+                else
+                    Environment.Exit(0);
             }
         }
 

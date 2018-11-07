@@ -41,8 +41,9 @@ namespace Foldersync
 
             
             // Validate the fields. If any contain invalid data, prompt the user to re-enter or delete this option
-            if (name.Count() <= 2)
+            if (name.Length <= 2)
             {
+                Console.WriteLine(name);
                 Console.WriteLine("The given name must have at least 3 characters\nPlease rename this setting before continuing.");
                 Console.Write("[Escape] Delete this setting\n[Any] To rename\n>");
                 if (Console.ReadKey().Key != ConsoleKey.Escape)
@@ -82,16 +83,15 @@ namespace Foldersync
             Console.WriteLine("Name this setting");
             Console.Write(">");
             string input = Console.ReadLine();
-
-            if (input.Count() <= 2)
+            if (input.Length > 2)
             {
-                Console.WriteLine("\nPlease enter a longer name");
-                rename();
+                name = input;
+                Console.Clear();
             }
             else
             {
-                Console.Clear();
-                name = input;
+                Console.WriteLine("\nPlease enter a longer name");
+                rename();
             }
         }
 
@@ -139,7 +139,7 @@ namespace Foldersync
         /// <summary>
         /// If this is a new object, gather and confirm data from the user
         /// </summary>
-        private void firstTimeSetup()
+        public void firstTimeSetup()
         {
             rename();
             generateLocalPath();
@@ -154,21 +154,25 @@ namespace Foldersync
                 Console.WriteLine("Localpath : " + localpath);
                 Console.WriteLine("Remotepath: " + remotepath);
                 Console.WriteLine("\n[N] Name\n[L] Change Localpath\n[R] Change Remotepath\n[Enter] Confirm");
-                if (Console.ReadKey().Key == ConsoleKey.Enter)
+                ConsoleKey input = Console.ReadKey().Key;
+                if (input == ConsoleKey.N)
                 {
-                    break;
+                    Console.Clear();
+                    rename();
                 }
-                else if (Console.ReadKey().Key == ConsoleKey.L)
+                else if (input == ConsoleKey.L)
                 {
+                    Console.Clear();
                     generateLocalPath();
                 }
-                else if (Console.ReadKey().Key == ConsoleKey.R)
+                else if (input == ConsoleKey.R)
                 {
+                    Console.Clear();
                     generateRemotePath();
                 }
-                else if (Console.ReadKey().Key == ConsoleKey.N)
+                else if (input == ConsoleKey.Enter)
                 {
-                    rename();
+                    break;
                 }
             }
             isFirstTimeSetup = false;
@@ -201,6 +205,10 @@ namespace Foldersync
         }
 
         // Accessor Methods
+        public string getName()
+        {
+            return name;
+        }
         public string getLocalpath()
         {
             return localpath;
