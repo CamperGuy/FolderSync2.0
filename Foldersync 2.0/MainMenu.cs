@@ -9,7 +9,7 @@ namespace Foldersync
 {
     class MainMenu
     {
-        private Program program = new Program();
+        Program program = new Program();
         private List<Syncer> modules = new List<Syncer>();
         private string settingsLocation = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData)) + @"\Foldersync\Settings\";
 

@@ -13,7 +13,6 @@ namespace Foldersync
     {
         // Initialise other classes
         private MainMenu menu = new MainMenu();
-        private Program program = new Program();
 
         // Initialise fields
         private bool isFirstTimeSetup = true;
@@ -51,8 +50,7 @@ namespace Foldersync
                 else
                     menu.removeMenu(this);
             }
-
-            if (!program.isPathValid(localpath, 0))
+            if (!Program.isPathValid(localpath, 0))
             {
                 Console.WriteLine("The given localpath is not valid. Please re-enter it before continuing.");
                 Console.Write("[Escape] Delete this setting\n[Any] Relocate Localpath\n>");
@@ -62,7 +60,7 @@ namespace Foldersync
                     menu.removeMenu(this);
             }
 
-            if (!program.isPathValid(remotepath, 0))
+            if (!Program.isPathValid(remotepath, 0))
             {
                 Console.WriteLine("The given remotepath is not valid. Please re-enter it before continuing.");
                 Console.Write("[Escape] Delete this setting\n[Any] Relocate Remotepath\n>");
@@ -105,7 +103,7 @@ namespace Foldersync
             Console.Write(">");
             string input = Console.ReadLine();
 
-            while (program.isPathValid(input, 3) == false)
+            while (Program.isPathValid(input, 3) == false)
             {
                 Console.Clear();
                 Console.Write("Localpath:\n>");
@@ -125,7 +123,7 @@ namespace Foldersync
             Console.Write(">");
             string input = Console.ReadLine();
 
-            while (program.isPathValid(input, 3) == false)
+            while (Program.isPathValid(input, 3) == false)
             {
                 Console.Clear();
                 Console.Write("Remotepath:\n>");

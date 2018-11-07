@@ -62,7 +62,7 @@ namespace Foldersync
         /// <param name="path">The path that will be looked at</param>
         /// <param name="mode">0 for not attempting to make Directory and not giving console output. 1 for giving console output only. 2 for attempting to create a directory only. 3 for everything enabled</param>
         /// <returns></returns>
-        public bool isPathValid(string path, int mode)
+        public static bool isPathValid(string path, int mode)
         {
             if (path.Contains(@"\"))
             {
