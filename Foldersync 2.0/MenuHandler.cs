@@ -9,6 +9,13 @@ namespace Foldersync_2._0
 {
     class MenuHandler
     {
+        /// <summary>
+        /// This class is responsible for displaying and handling the menu
+        /// navigation throughout this program. A new Menu as well as its
+        /// entries would be defined, linked together and loaded at the
+        /// appropriate user interaction
+        /// </summary>
+        
         public Menu activeMenu;
 
         public MenuHandler()
@@ -34,6 +41,12 @@ namespace Foldersync_2._0
         Entry settingExample = new Entry(0, "Just an example", ConsoleKey.E);
         Entry settingBack = new Entry(1, "Back", ConsoleKey.B);
         Entry settingQuit = new Entry(2, "Quit", ConsoleKey.Q);
+
+        public Menu newConnectionMenu = new Menu("New Connection Type");
+        Entry newWindows = new Entry(0, "New SAMBA/Windows connection", ConsoleKey.W);
+        Entry newSSH = new Entry(1, "New SSH connection", ConsoleKey.S);
+        Entry newFTP = new Entry(2, "New FTP connection", ConsoleKey.F);
+        Entry newConnectionBack = new Entry(3, "Back", ConsoleKey.B);
 
         public void loadMainMenu()
         {
@@ -77,6 +90,19 @@ namespace Foldersync_2._0
             ConsoleKey input = Console.ReadKey().Key;
             checkInput(input);
         }
+        public void loadNewConnectionMenu()
+        {
+            Console.Clear();
+            newConnectionMenu.addItem(newWindows);
+            newConnectionMenu.addItem(newSSH);
+            newConnectionMenu.addItem(newFTP);
+            newConnectionMenu.addItem(newConnectionBack);
+            newConnectionMenu.loadMenu();
+            activeMenu = newConnectionMenu;
+            ConsoleKey input = Console.ReadKey().Key;
+            checkInput(input);
+        }
+
         public void checkInput(ConsoleKey input)
         {
             if (activeMenu == mainMenu)
@@ -116,6 +142,7 @@ namespace Foldersync_2._0
                 {
                     case ConsoleKey.A:
                         // Add a connection
+                        loadNewConnectionMenu();
                         break;
                     case ConsoleKey.R:
                         // Remove an existing connection
@@ -145,11 +172,9 @@ namespace Foldersync_2._0
                 switch (input)
                 {
                     case ConsoleKey.B:
-                        // Back
                         loadMainMenu();
                         break;
                     case ConsoleKey.Q:
-                        // Quit
                         Environment.Exit(0);
                         break;
                     default:
@@ -159,6 +184,32 @@ namespace Foldersync_2._0
                         Console.Clear();
                         reload();
                         break;
+                }
+            }
+            else if (activeMenu == newConnectionMenu)
+            {
+                switch (input)
+                {
+                    case (ConsoleKey.W):
+                        Connection.setNewWinCon();
+                        break;
+                    case (ConsoleKey.S):
+                        Connection.setNewSSHCon();
+                        break;
+                    case (ConsoleKey.F):
+                        Connection.setNewFTPCon();
+                        break;
+                    case (ConsoleKey.B):
+                        loadManageConnectionMenu();
+                        break;
+                    default:
+                        Console.Write("\n\n\nInvalid input, please try again ");
+                        Console.WriteLine(input.ToString());
+                        Thread.Sleep(1000);
+                        Console.Clear();
+                        reload();
+                        break;
+
                 }
             }
         }
@@ -171,6 +222,8 @@ namespace Foldersync_2._0
                 loadManageConnectionMenu();
             else if (activeMenu.Equals(settingsMenu))
                 loadSettingsMenu();
+            else if (activeMenu.Equals(newConnectionMenu))
+                loadNewConnectionMenu();
         }
 
         private void showInfo()

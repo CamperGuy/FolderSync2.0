@@ -9,6 +9,19 @@ namespace Foldersync_2._0
 {
     class Logger
     {
+        /* Tasks:
+         * - Implement non-static complete function to print a message stating
+         * that the current task (as initialised with) has been completed
+         */
+
+        /// <summary>
+        /// This class' purpose is to have an easily available way of
+        /// printing into a log file. For each major task i.e. creating
+        /// a new Connection, a new Logger object would be created. The
+        /// constructor would handle appropriate formatting. The same
+        /// object could then be used via loggerObject.writeMessage("Message")
+        /// to append to the current task.
+        /// </summary>
         private static string path = Path.GetTempPath() + @"\foldersync_log.txt";
         public Logger(string task)
         {

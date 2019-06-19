@@ -9,19 +9,42 @@ namespace Foldersync_2._0
 {
     class Parser
     {
+        /* Tasks:
+         * 
+         * Update internal functions to return a boolean value
+         * This would allow to only write a corresponding log message when
+         * the function has made changes to any file structures to prevent
+         * writing logs when nothing has actually been done
+         * 
+         * Add Logger to corresponding steps (currently in Object-Method mirrorFileStructure)
+         * 
+         * checkIfEmpty actually needs to do something
+         * 
+         * Standardise to account for different connection types
+         */
+
+         /// <summary>
+         /// The Parser is responsible for any file handling. Mainly mirroring
+         /// file structures of two location
+         /// </summary>
         public string path1 { get; private set; }
         public string path2 { get; private set; }
+        private Logger logger = new Logger("Parser");
+
+        public Connection connectionType { get; private set; }
 
         private List<FileProperties> path1Files = new List<FileProperties>();
         private List<FileProperties> path2Files = new List<FileProperties>();
         private List<string> path1Directories = new List<string>();
         private List<string> path2Directories = new List<string>();
 
-        public Parser(string sourcePath, string destinationPath)
+        public Parser(string sourcePath, string destinationPath, Connection type)
         {
             path1 = sourcePath;
             path2 = destinationPath;
+            connectionType = type;
         }
+
         private static bool checkIfEmpty(string source, string target)
         {
             return true;
@@ -31,21 +54,25 @@ namespace Foldersync_2._0
         {
             Parser.checkIfEmpty(path1, path2);
             loadFileStructure();
+            logger.writeMessage("-- Loaded file structure");
             eraseDifferingStructure();
+            logger.writeMessage("--- Deleted mismatched files");
             copyMissingDirectories();
+            logger.writeMessage("--- Copied directory structure");
             copyMissingFiles();
+            logger.writeMessage("--- Copied missing files");
             updateExistingFiles();
+            logger.writeMessage("--- Updated existing files");
         }
-        public static void mirrorFileStructure(string source, string target)
+        public static void mirrorFileStructure(string source, string target, Connection type)
         {
-            Parser parser = new Parser(source, target);
+            Parser parser = new Parser(source, target, type);
             parser.loadFileStructure();
             parser.eraseDifferingStructure();
             parser.copyMissingDirectories();
             parser.copyMissingFiles();
             parser.updateExistingFiles();
         }
-
         public void loadFileStructure()
         {   
             // Get all the directories in the sourcepath
@@ -109,6 +136,14 @@ namespace Foldersync_2._0
                 if (!File.Exists(path2 + path1Files[i]))
                     File.Copy(path2 + path1Files[i], path2 + path1Files[i]);
             }
+        }
+        public static void copy(string sourcepath, string targetpath, Connection type)
+        {
+            Parser parser = new Parser(sourcepath, targetpath, type);
+            parser.loadFileStructure();
+            parser.copyMissingDirectories();
+            parser.copyMissingFiles();
+            parser.updateExistingFiles();
         }
         public void updateExistingFiles()
         {
