@@ -8,10 +8,11 @@
     <OutputType>Exe</OutputType>
     <RootNamespace>Foldersync_2._0</RootNamespace>
     <AssemblyName>Foldersync 2.0</AssemblyName>
-    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <Deterministic>true</Deterministic>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -46,9 +47,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Syncer.cs" />
-    <Compile Include="MainMenu.cs" />
-    <Compile Include="Program.cs" />
+    <Compile Include="Connection.cs" />
+    <Compile Include="ConnectionManager.cs" />
+    <Compile Include="Entry.cs" />
+    <Compile Include="FileProperties.cs" />
+    <Compile Include="FolderSync.cs" />
+    <Compile Include="Logger.cs" />
+    <Compile Include="Menu.cs" />
+    <Compile Include="MenuHandler.cs" />
+    <Compile Include="Parser.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
