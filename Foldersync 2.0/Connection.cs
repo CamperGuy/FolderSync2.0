@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.IO;
 
 namespace Foldersync_2._0
 {
@@ -47,10 +48,60 @@ namespace Foldersync_2._0
 
         public static bool verify(ConnectionType type, string path)
         {
+            Logger log = new Logger("Path verification");
             if (type == ConnectionType.Samba)
             {
-                // Path verification through windows connection
-                return true;
+                if (path.Contains(@":\"))
+                {
+                    if (!Directory.Exists(path))
+                    {
+                        Console.Write("\nWould you like to create this directory? [y/n]\n>");
+                        if (Console.ReadKey().Key == ConsoleKey.Y)
+                        {
+                            try
+                            {
+                                log.writeMessage("Attempting to create " + path);
+                                Directory.CreateDirectory(path);
+                            }
+                            catch (IOException ex)
+                            {
+                                if (!Directory.Exists(path))
+                                {
+                                    log.writeMessage("Failed to create " + path);
+                                    Console.WriteLine("\n\n[Error]");
+                                    Console.WriteLine("Failed to create " + path);
+                                }
+                                else
+                                {
+                                    log.writeMessage("Unspecified error during directory creation\n " + ex);
+                                    Console.WriteLine("\n\n[Error]");
+                                    Console.WriteLine("An unspecified error occured");
+                                    Console.WriteLine("When trying to create " + path);
+                                }
+                                new System.Threading.ManualResetEvent(false).WaitOne(1000);
+                                return false;
+                            }
+                            log.writeMessage("Successfully created " + path);
+                        }
+                        else
+                        {
+                            return false;
+                        }
+                    }
+                    try
+                    {
+                        System.Security.AccessControl.DirectorySecurity ds = Directory.GetAccessControl(path);
+                        return true;
+                    }
+                    catch (UnauthorizedAccessException)
+                    {
+                        log.writeMessage("No write access to " + path);
+                        Console.WriteLine("\n\n[Error] Write Access");
+                        Console.WriteLine("You have no permissions to write to:\n" + path);
+                        new System.Threading.ManualResetEvent(false).WaitOne(1000);
+                        return false;
+                    }
+                }
             }
             else if (type == ConnectionType.FTP)
             {
@@ -66,10 +117,13 @@ namespace Foldersync_2._0
         }
         public static void setNewWinCon()
         {
+            Logger log = new Logger("Setting up windows connection");
             bool localVerif = false;
             bool remoteVerif = false;
             string localPath = "";
             string remotePath = "";
+            string name = "";
+
             while (!localVerif)
             {
                 Console.Clear();
@@ -79,6 +133,10 @@ namespace Foldersync_2._0
                 localVerif = verify(ConnectionType.Samba, localPath);
                 Console.Write("\n");
             }
+
+            log.writeMessage("Local path set to " + localPath);
+            Connection localConnection = new Connection(ConnectionType.Samba, localPath);
+
             while (!remoteVerif)
             {
                 Console.Clear();
@@ -90,13 +148,52 @@ namespace Foldersync_2._0
                 remotePath = Console.ReadLine();
                 remoteVerif = verify(ConnectionType.Samba, remotePath);
             }
-            Console.WriteLine("Debug point");
+
+            log.writeMessage("Remote path set to " + remotePath);
+            Connection remoteConnection = new Connection(ConnectionType.Samba, remotePath);
+
+            Console.Clear();
+            Console.WriteLine("--- New Windows Connection between: ---\n");
+            Console.WriteLine("[Local] " + localPath + "\n[Remote] " + remotePath);
+            Console.Write("\nEnter a name for this connection:\n>");
+
+            // Save this information in some form (yet to learn about JSON, XML or something)
+            ConnectionPair cp = new ConnectionPair(Console.ReadLine(), localConnection, remoteConnection);
+
+            Console.WriteLine("Endpoint");
             Console.ReadKey();
         }
 
         public static void setNewSSHCon()
         {
-
+            bool localVerif = false;
+            string localPath = "";
+            string remoteIP = "";
+            int remotePort = 22;
+            string remoteUsername = "";
+            string remotePassword = "";
+            while (!localVerif)
+            {
+                Console.Clear();
+                Console.WriteLine("--- New SSH Connection ---\n");
+                Console.Write("Enter the local location:\n>");
+                localPath = Console.ReadLine();
+                localVerif = verify(ConnectionType.Samba, localPath);
+                Console.Write("\n");
+            }
+            // Requires proper input verifiction
+            // Password to be entered as ***
+            // Connection to be tested
+            Console.Clear();
+            Console.WriteLine("--- New SSH Connection ---\n");
+            Console.Write("Enter the remote IP:\n>");
+            remoteIP = Console.ReadLine();
+            Console.Write("\nEnter the remote Port:\n>");
+            Int32.TryParse(Console.ReadLine(), out remotePort);
+            Console.Write("\n[Blank if unknown]\nEnter the remote Username:\n>");
+            remoteUsername = Console.ReadLine();
+            Console.Write("\n[Blank if unknown]\nEnter the remote Password:\n>");
+            remotePassword = Console.ReadLine();
         }
 
         public static void setNewFTPCon()

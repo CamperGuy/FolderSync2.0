@@ -23,8 +23,10 @@ namespace Foldersync_2._0
         /// to append to the current task.
         /// </summary>
         private static string path = Path.GetTempPath() + @"\foldersync_log.txt";
+        private string task = "";
         public Logger(string task)
         {
+            this.task = task;
             StreamWriter writer = new StreamWriter(path);
             writer.WriteLine(task + " started at: " + DateTime.Now.ToString("HH:mm:ss"));
             writer.Close();
@@ -42,6 +44,19 @@ namespace Foldersync_2._0
             string time = DateTime.Now.ToString("HH:mm:ss");
             writer.WriteLine("[" + time + "]" + message);
             writer.Close();
+        }
+
+        public void close()
+        {
+            StreamWriter writer = new StreamWriter(path);
+            string time = DateTime.Now.ToString("HH:mm:ss");
+            writer.WriteLine("Completed " + task + " at " + time);
+        }
+        public void close(string optionalCloseMessage)
+        {
+            StreamWriter writer = new StreamWriter(path);
+            string time = DateTime.Now.ToString("HH:mm:ss");
+            writer.WriteLine("Completed " + optionalCloseMessage + " at " + time);
         }
         public static void open()
         {

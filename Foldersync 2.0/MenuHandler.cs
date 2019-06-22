@@ -43,7 +43,7 @@ namespace Foldersync_2._0
         Entry settingQuit = new Entry(2, "Quit", ConsoleKey.Q);
 
         public Menu newConnectionMenu = new Menu("New Connection Type");
-        Entry newWindows = new Entry(0, "New SAMBA/Windows connection", ConsoleKey.W);
+        Entry newWindows = new Entry(0, "New Windows connection", ConsoleKey.W);
         Entry newSSH = new Entry(1, "New SSH connection", ConsoleKey.S);
         Entry newFTP = new Entry(2, "New FTP connection", ConsoleKey.F);
         Entry newConnectionBack = new Entry(3, "Back", ConsoleKey.B);

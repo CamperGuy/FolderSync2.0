@@ -7,12 +7,9 @@ using System.Linq.Expressions;
 
 namespace Foldersync_2._0
 {
-    /* Known Bugs in this class:
-     * - Items aren't loaded by their index but by the order they have been added
-     */
     class Menu
     {
-        private Dictionary<int, Entry> entries = new Dictionary<int, Entry>();
+        private SortedDictionary<int, Entry> entries = new SortedDictionary<int, Entry>();
         private List<ConsoleKey> keys = new List<ConsoleKey>();
         public string name { get; private set; }
         
@@ -55,7 +52,6 @@ namespace Foldersync_2._0
         /// </summary>
         public int loadMenu()
         {
-            sortEntries();
             if (entries.Count() == 0)
             { 
                 return 1;
@@ -69,15 +65,6 @@ namespace Foldersync_2._0
                 run++;
             }
             Console.Write("\n>");
-            return 0;
-        }
-
-        /// <summary>
-        /// void sortEntries() sorts the local field 'entries' by the index parameter of the Entry objects
-        /// </summary>
-        private int sortEntries()
-        {
-            entries.OrderBy(x => x.Value);
             return 0;
         }
     }

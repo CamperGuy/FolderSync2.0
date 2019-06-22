@@ -29,6 +29,7 @@ namespace Foldersync_2._0
          /// </summary>
         public string path1 { get; private set; }
         public string path2 { get; private set; }
+
         private Logger logger = new Logger("Parser");
 
         public Connection connectionType { get; private set; }
@@ -38,7 +39,7 @@ namespace Foldersync_2._0
         private List<string> path1Directories = new List<string>();
         private List<string> path2Directories = new List<string>();
 
-        public Parser(string sourcePath, string destinationPath, Connection type)
+        public Parser(Connection type, string sourcePath, string destinationPath)
         {
             path1 = sourcePath;
             path2 = destinationPath;
@@ -64,9 +65,9 @@ namespace Foldersync_2._0
             updateExistingFiles();
             logger.writeMessage("--- Updated existing files");
         }
-        public static void mirrorFileStructure(string source, string target, Connection type)
+        public static void mirrorFileStructure(Connection type, string source, string target)
         {
-            Parser parser = new Parser(source, target, type);
+            Parser parser = new Parser(type, source, target);
             parser.loadFileStructure();
             parser.eraseDifferingStructure();
             parser.copyMissingDirectories();
@@ -137,9 +138,9 @@ namespace Foldersync_2._0
                     File.Copy(path2 + path1Files[i], path2 + path1Files[i]);
             }
         }
-        public static void copy(string sourcepath, string targetpath, Connection type)
+        public static void copy(Connection type, string sourcepath, string targetpath)
         {
-            Parser parser = new Parser(sourcepath, targetpath, type);
+            Parser parser = new Parser(type, sourcepath, targetpath);
             parser.loadFileStructure();
             parser.copyMissingDirectories();
             parser.copyMissingFiles();
