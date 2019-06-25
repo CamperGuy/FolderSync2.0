@@ -50,10 +50,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Connection.cs" />
+    <Compile Include="WindowsConnection.cs" />
     <Compile Include="ConnectionManager.cs" />
     <Compile Include="ConnectionPair.cs" />
-    <Compile Include="Entry.cs" />
+    <Compile Include="MenuEntry.cs" />
     <Compile Include="FileProperties.cs" />
     <Compile Include="FolderSync.cs" />
     <Compile Include="Logger.cs" />
@@ -61,6 +61,7 @@
     <Compile Include="MenuHandler.cs" />
     <Compile Include="Parser.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RemoteConnection.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

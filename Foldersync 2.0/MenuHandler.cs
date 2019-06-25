@@ -24,29 +24,29 @@ namespace Foldersync_2._0
         }
 
         public Menu mainMenu = new Menu("Main Menu");
-        Entry mainEnable = new Entry(0, "Enable", ConsoleKey.E);
-        Entry mainDisable = new Entry(0, "Disable", ConsoleKey.D);
-        Entry mainMngConnection = new Entry(1, "Manage Connections", ConsoleKey.M);
-        Entry mainSettings = new Entry(2, "Settings", ConsoleKey.S);
-        Entry mainInfo = new Entry(3, "Information", ConsoleKey.I);
-        Entry mainQuit = new Entry(4, "Quit", ConsoleKey.Q);
+        MenuEntry mainEnable = new MenuEntry(0, "Enable", ConsoleKey.E);
+        MenuEntry mainDisable = new MenuEntry(0, "Disable", ConsoleKey.D);
+        MenuEntry mainMngConnection = new MenuEntry(1, "Manage Connections", ConsoleKey.M);
+        MenuEntry mainSettings = new MenuEntry(2, "Settings", ConsoleKey.S);
+        MenuEntry mainInfo = new MenuEntry(3, "Information", ConsoleKey.I);
+        MenuEntry mainQuit = new MenuEntry(4, "Quit", ConsoleKey.Q);
 
         public Menu manageConnectionsMenu = new Menu("Manage Connections");
-        Entry manNewCon = new Entry(0, "Add new connection", ConsoleKey.A);
-        Entry manRemoveCon = new Entry(1, "Remove a connection", ConsoleKey.R);
-        Entry manChangeState = new Entry(2, "Change sync status of a connection", ConsoleKey.C);
-        Entry manBack = new Entry(3, "Back to Main Menu", ConsoleKey.B);
+        MenuEntry manNewCon = new MenuEntry(0, "Add new connection", ConsoleKey.A);
+        MenuEntry manRemoveCon = new MenuEntry(1, "Remove a connection", ConsoleKey.R);
+        MenuEntry manChangeState = new MenuEntry(2, "Change sync status of a connection", ConsoleKey.C);
+        MenuEntry manBack = new MenuEntry(3, "Back to Main Menu", ConsoleKey.B);
 
         public Menu settingsMenu = new Menu("Settings");
-        Entry settingExample = new Entry(0, "Just an example", ConsoleKey.E);
-        Entry settingBack = new Entry(1, "Back", ConsoleKey.B);
-        Entry settingQuit = new Entry(2, "Quit", ConsoleKey.Q);
+        MenuEntry settingExample = new MenuEntry(0, "Just an example", ConsoleKey.E);
+        MenuEntry settingBack = new MenuEntry(1, "Back", ConsoleKey.B);
+        MenuEntry settingQuit = new MenuEntry(2, "Quit", ConsoleKey.Q);
 
         public Menu newConnectionMenu = new Menu("New Connection Type");
-        Entry newWindows = new Entry(0, "New Windows connection", ConsoleKey.W);
-        Entry newSSH = new Entry(1, "New SSH connection", ConsoleKey.S);
-        Entry newFTP = new Entry(2, "New FTP connection", ConsoleKey.F);
-        Entry newConnectionBack = new Entry(3, "Back", ConsoleKey.B);
+        MenuEntry newWindows = new MenuEntry(0, "New Windows connection", ConsoleKey.W);
+        MenuEntry newSSH = new MenuEntry(1, "New SSH connection", ConsoleKey.S);
+        MenuEntry newFTP = new MenuEntry(2, "New SFTP connection", ConsoleKey.F);
+        MenuEntry newConnectionBack = new MenuEntry(3, "Back", ConsoleKey.B);
 
         public void loadMainMenu()
         {
@@ -111,9 +111,13 @@ namespace Foldersync_2._0
                 {
                     case ConsoleKey.E:
                         // From DISABLED to ENABLED
+                        Console.WriteLine("\nEndpoint");
+                        Console.ReadKey();
                         break;
                     case ConsoleKey.D:
                         // From ENABLED to DISABLED
+                        Console.WriteLine("\nEndpoint");
+                        Console.ReadKey();
                         break;
                     case ConsoleKey.M:
                         loadManageConnectionMenu();
@@ -146,9 +150,15 @@ namespace Foldersync_2._0
                         break;
                     case ConsoleKey.R:
                         // Remove an existing connection
+                        Console.WriteLine("Load in existing connections from a file that does not yet exist");
+                        Console.WriteLine("In other words;\nEndpoint");
+                        Console.ReadKey();
                         break;
                     case ConsoleKey.C:
                         // Change activity status
+                        Console.WriteLine("Load in existing connections from a file that does not yet exist");
+                        Console.WriteLine("In other words;\nEndpoint");
+                        Console.ReadKey();
                         break;
                     case ConsoleKey.B:
                         // Back
@@ -191,13 +201,13 @@ namespace Foldersync_2._0
                 switch (input)
                 {
                     case (ConsoleKey.W):
-                        Connection.setNewWinCon();
+                        ConnectionManager.cliNewWindowsConnection();
                         break;
                     case (ConsoleKey.S):
-                        Connection.setNewSSHCon();
+                        ConnectionManager.cliNewSSHConnection();
                         break;
                     case (ConsoleKey.F):
-                        Connection.setNewFTPCon();
+                        ConnectionManager.cliNewSFTPConnection();
                         break;
                     case (ConsoleKey.B):
                         loadManageConnectionMenu();
@@ -229,9 +239,9 @@ namespace Foldersync_2._0
         private void showInfo()
         {
             Console.Clear();
-            Console.WriteLine("Okay so here is meant to be some nice text about how to use this application.");
-            Console.WriteLine("But I don't really know what to say yet other that this is an empty menu structure");
-            Console.WriteLine("\nI love you baby <3");
+            Console.WriteLine("--- Information ---");
+            Console.WriteLine("\nThis program will sync a remote location to a specified folder on your local machine.");
+            Console.WriteLine("\nFor more detailed information visit:\nhttps://github.com/CamperGuy/Foldersync2.0/README.md");
             Console.Write("\n>");
             Console.ReadKey();
             reload();

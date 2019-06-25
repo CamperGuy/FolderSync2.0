@@ -9,7 +9,7 @@ namespace Foldersync_2._0
 {
     class Menu
     {
-        private SortedDictionary<int, Entry> entries = new SortedDictionary<int, Entry>();
+        private SortedDictionary<int, MenuEntry> entries = new SortedDictionary<int, MenuEntry>();
         private List<ConsoleKey> keys = new List<ConsoleKey>();
         public string name { get; private set; }
         
@@ -22,7 +22,7 @@ namespace Foldersync_2._0
         /// </summary>
         /// <param name="entry"></param>
         /// <returns></returns>
-        public int addItem(Entry entry)
+        public int addItem(MenuEntry entry)
         {
             if (!entries.ContainsKey(entry.index) && !keys.Contains(entry.key))
             {
@@ -37,7 +37,7 @@ namespace Foldersync_2._0
         /// </summary>
         /// <param name="entry"></param>
         /// <returns></returns>
-        public int removeItem(Entry entry)
+        public int removeItem(MenuEntry entry)
         {
             if (entries.ContainsKey(entry.index) && entries.ContainsValue(entry) && keys.Contains(entry.key))
             {
@@ -57,7 +57,7 @@ namespace Foldersync_2._0
                 return 1;
             }
             int run = 0;
-            foreach (KeyValuePair<int, Entry> entry in entries)
+            foreach (KeyValuePair<int, MenuEntry> entry in entries)
             {
                 if (run == 0)
                     Console.WriteLine("--- " + name + " ---\n");

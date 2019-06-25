@@ -32,14 +32,14 @@ namespace Foldersync_2._0
 
         private Logger logger = new Logger("Parser");
 
-        public Connection connectionType { get; private set; }
+        public WindowsConnection connectionType { get; private set; }
 
         private List<FileProperties> path1Files = new List<FileProperties>();
         private List<FileProperties> path2Files = new List<FileProperties>();
         private List<string> path1Directories = new List<string>();
         private List<string> path2Directories = new List<string>();
 
-        public Parser(Connection type, string sourcePath, string destinationPath)
+        public Parser(WindowsConnection type, string sourcePath, string destinationPath)
         {
             path1 = sourcePath;
             path2 = destinationPath;
@@ -65,7 +65,7 @@ namespace Foldersync_2._0
             updateExistingFiles();
             logger.writeMessage("--- Updated existing files");
         }
-        public static void mirrorFileStructure(Connection type, string source, string target)
+        public static void mirrorFileStructure(WindowsConnection type, string source, string target)
         {
             Parser parser = new Parser(type, source, target);
             parser.loadFileStructure();
@@ -138,7 +138,7 @@ namespace Foldersync_2._0
                     File.Copy(path2 + path1Files[i], path2 + path1Files[i]);
             }
         }
-        public static void copy(Connection type, string sourcepath, string targetpath)
+        public static void copy(WindowsConnection type, string sourcepath, string targetpath)
         {
             Parser parser = new Parser(type, sourcepath, targetpath);
             parser.loadFileStructure();
@@ -158,6 +158,73 @@ namespace Foldersync_2._0
                         File.Copy(path1 + path1Files[i], path2 + path1Files[i], true);
                 }
             }
+        }
+
+        public static bool verifyDir( string path)
+        {
+            Logger log = new Logger("Path verification");
+                if (path.Contains(@":\"))
+                {
+                    if (!Directory.Exists(path))
+                    {
+                        Console.Write("\nWould you like to create this directory? [y/n]\n>");
+                        if (Console.ReadKey().Key == ConsoleKey.Y)
+                        {
+                            try
+                            {
+                                log.writeMessage("Attempting to create " + path);
+                                Directory.CreateDirectory(path);
+                            }
+                            catch (IOException ex)
+                            {
+                                if (!Directory.Exists(path))
+                                {
+                                    log.writeMessage("Failed to create " + path);
+                                    Console.WriteLine("\n\n[Error]");
+                                    Console.WriteLine("Failed to create " + path);
+                                }
+                                else
+                                {
+                                    log.writeMessage("Unspecified error during directory creation\n " + ex);
+                                    Console.WriteLine("\n\n[Error]");
+                                    Console.WriteLine("An unspecified error occured");
+                                    Console.WriteLine("When trying to create " + path);
+                                }
+                                new System.Threading.ManualResetEvent(false).WaitOne(1000);
+                                return false;
+                            }
+                            log.writeMessage("Successfully created " + path);
+                        }
+                        else
+                        {
+                            return false;
+                        }
+                    }
+                    try
+                    {
+                        System.Security.AccessControl.DirectorySecurity ds = Directory.GetAccessControl(path);
+                        return true;
+                    }
+                    catch (UnauthorizedAccessException)
+                    {
+                        log.writeMessage("No write access to " + path);
+                        Console.WriteLine("\n\n[Error] Write Access");
+                        Console.WriteLine("You have no permissions to write to:\n" + path);
+                        new System.Threading.ManualResetEvent(false).WaitOne(1000);
+                        return false;
+                    }
+                
+            }
+            return false;
+        }
+        public static bool verifyFile(string path)
+        {
+            if (path.Contains(@":\"))
+            {
+                if (File.Exists(path))
+                    return true;
+            }
+            return false;
         }
     }
 }

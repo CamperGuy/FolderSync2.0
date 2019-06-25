@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace Foldersync_2._0
 {
-    public class Entry 
+    public class MenuEntry 
     {
-        public Entry(int index, string content, ConsoleKey key)
+        public MenuEntry(int index, string content, ConsoleKey key)
         {
             this.index = index;
             this.content = content;
@@ -17,5 +17,14 @@ namespace Foldersync_2._0
         public int index { get; private set; }
         public string content { get; private set; }
         public ConsoleKey key { get; private set; }
+        public void relocate(int updatedIndex)
+        {
+            index = updatedIndex;
+        }
+        public void rename(string updatedContent)
+        {
+            if (updatedContent.Length != 0)
+                content = updatedContent;
+        }
     }
 }
