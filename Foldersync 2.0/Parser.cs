@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.IO;
+using System.Xml;
 
 namespace Foldersync_2._0
 {
@@ -31,6 +32,7 @@ namespace Foldersync_2._0
         public string path2 { get; private set; }
 
         private Logger logger = new Logger("Parser");
+        private static string xmlpath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Foldersync.xml");
 
         public WindowsConnection connectionType { get; private set; }
 
@@ -160,7 +162,7 @@ namespace Foldersync_2._0
             }
         }
 
-        public static bool verifyDir( string path)
+        public static bool verifyDir(string path)
         {
             Logger log = new Logger("Path verification");
                 if (path.Contains(@":\"))
@@ -225,6 +227,39 @@ namespace Foldersync_2._0
                     return true;
             }
             return false;
+        }
+        public static void writeXML(ConnectionPair pair)
+        {
+            if (!File.Exists(xmlpath))
+            {
+                XmlWriterSettings xmlSettings = new XmlWriterSettings();
+                xmlSettings.Indent = true;
+                xmlSettings.NewLineOnAttributes = true;
+                using (XmlWriter xmlWriter = XmlWriter.Create(xmlpath, xmlSettings))
+                {
+                    xmlWriter.WriteStartDocument();
+                    xmlWriter.WriteStartElement("Connections");
+                    xmlWriter.WriteEndElement();
+
+                    xmlWriter.WriteStartElement("Settings");
+                    xmlWriter.WriteEndElement();
+
+                    xmlWriter.WriteEndDocument();
+                    xmlWriter.Close();
+                }
+            }
+            else
+            {
+                XmlDocument xmlDoc = new XmlDocument();
+                xmlDoc.Load(xmlpath);
+                XmlNodeList connectionNodes = xmlDoc.SelectNodes("//Connections/");
+                foreach (XmlNode connectionNode in connectionNodes)
+                {
+                    int age = int.Parse(connectionNode.Attributes["age"].Value);
+                    connectionNode.Attributes["age"].Value = (age + 1).ToString();
+                }
+                xmlDoc.Save(xmlpath);
+            }
         }
     }
 }

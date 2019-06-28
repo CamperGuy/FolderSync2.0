@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Renci.SshNet;
+using System.IO;
+using Renci.SshNet.Common;
 
 namespace Foldersync_2._0
 {
@@ -76,7 +78,7 @@ namespace Foldersync_2._0
             PrivateKeyFile keyFile = null;
 
             WindowsConnection localEnd;
-            RemoteConnection remoteEnd = null;
+            RemoteConnection remote = null;
 
             bool localVerif = false;
             while (!localVerif)
@@ -155,14 +157,19 @@ namespace Foldersync_2._0
                     }
                 }
             }
-            remoteEnd = new RemoteConnection(ConnectionType.SSH, remoteHost, remotePort, username, keyFile);
 
             Console.Clear();
             Console.WriteLine("--- Name connection to: " + remoteHost + "---");
             Console.Write("\n\nEnter a name:\n>");
-            ConnectionPair cp = new ConnectionPair(Console.ReadLine(), localEnd, remoteEnd);
+            if (keyFile == null)
+                remote = new RemoteConnection(ConnectionType.SSH, remoteHost, remotePort, username, password);
+            else
+                remote = new RemoteConnection(ConnectionType.SSH, remoteHost, remotePort, username, keyFile);
+
+            ConnectionPair cp = new ConnectionPair(Console.ReadLine(), localEnd, remote);
             cp.save();
 
+            SSHSetup(remote);
             Console.WriteLine("Endpoint");
             Console.ReadKey();
         }
@@ -265,6 +272,61 @@ namespace Foldersync_2._0
 
             Console.WriteLine("Endpoint");
             Console.ReadKey();
+        }
+
+        public static void SSHSetup(RemoteConnection remote)
+        {
+            Console.Clear();
+            Console.WriteLine("--- Testing Connection to: " + remote.host);
+            Console.WriteLine("\n- Resolving Hostname...");
+            // Put all of this in tries etc
+            // Holy shit this function needs sorting out. But I'm just learning, okay? Tanks.
+            remote.sshClient.Connect();
+            Console.WriteLine("- Confirming Fingerprints...");
+            // Accept the fingerprint
+            remote.sshClient.HostKeyReceived += delegate (object sender, HostKeyEventArgs e) { e.CanTrust = true; };
+
+            string foldersyncStatus = "";
+            if (FolderSync.RUNNING == true)
+                foldersyncStatus = "Enabled";
+            else
+                foldersyncStatus = "Disabled";
+            Console.Title = "Foldersync - SSH to " + remote.host + " - " + foldersyncStatus;
+
+            Console.WriteLine("\n[empty for root]\nPlease set the folder to sync");
+            Console.Write("\n>");
+            remote.entryPoint = Console.ReadLine();
+
+            // This is where the logic will step in
+            // Run this through the parser and shit
+            var cmd = remote.sshClient.CreateCommand("ls " + remote.entryPoint);
+            var result = cmd.Execute();
+
+            Console.Write(result);
+            // Needs a proper fingerprint check but idfk how to
+            // Where/how does the local fingerprint get generated?
+            /*
+             *  public static byte[] ConvertFingerprintToByteArray(String fingerprint)
+                {
+                    return fingerprint.Split(':').Select(s => Convert.ToByte(s, 16)).ToArray();
+                }
+                client.HostKeyReceived += delegate (object sender, HostKeyEventArgs e)
+                {
+                    if (e.FingerPrint.SequenceEqual(ConvertFingerprintToByteArray("1d:c1:5a:71:c4:8e:a3:ff:01:0a:3b:46:17:6f:e1:52")))
+                        e.CanTrust = true;
+                    else
+                        e.CanTrust = false;
+                };
+
+                To make a shell:
+                var shell = client.CreateShell(input, Console.OpenStandardOutput(), new MemoryStream());
+                shell.Start();
+                StreamWriter.WriteLine("scp");
+                input.Position = 0;
+                Console.ReadKey();
+                client.Disconnect();
+                client.Dispose();
+             */
         }
     }
 }

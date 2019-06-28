@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Renci.SshNet;
+using System.IO;
+using Renci.SshNet.Common;
 
 namespace Foldersync_2._0
 {
@@ -18,9 +20,21 @@ namespace Foldersync_2._0
         private ConnectionManager.ConnectionType connectionType;
         public SshClient sshClient { get; private set; }
         public SftpClient sftpClient { get; private set; }
+        public WindowsConnection windowsLocal { get; private set; }
+        public RemoteConnection remoteLocal { get; private set; }
+        public string entryPoint = "";
 
+        public void linkLocal(WindowsConnection winCon)
+        {
+            windowsLocal = winCon;
+        }
+        public void linkLocal(RemoteConnection remCon)
+        {
+            remoteLocal = remCon;
+        }
         public RemoteConnection(ConnectionManager.ConnectionType connectionType, string host, int port, string username, PrivateKeyFile keyFile)
         {
+            sshClient = null;
             this.connectionType = connectionType;
             this.host = host;
             this.port = port;
@@ -36,6 +50,7 @@ namespace Foldersync_2._0
         }
         public RemoteConnection(ConnectionManager.ConnectionType connectionType, string host, int port, string username, string password)
         {
+            sshClient = null;
             this.host = host;
             this.port = port;
             this.username = username;
@@ -47,5 +62,7 @@ namespace Foldersync_2._0
             else if (connectionType == ConnectionManager.ConnectionType.SFTP)
                 sftpClient = new SftpClient(passwordInfo);
         }
+
+        
     }
 }

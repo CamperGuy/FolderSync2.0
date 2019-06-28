@@ -13,6 +13,7 @@ namespace Foldersync_2._0
         static void Main(string[] args)
         {
             consoleSetup();
+            // Parser.writeXML();
             menuHandler = new MenuHandler();
             menuHandler.loadMainMenu();
         }
