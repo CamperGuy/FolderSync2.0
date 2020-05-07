@@ -7,7 +7,7 @@ using Renci.SshNet;
 using System.IO;
 using Renci.SshNet.Common;
 
-namespace Foldersync_2._0
+namespace Foldersync
 {
     class ConnectionManager
     {

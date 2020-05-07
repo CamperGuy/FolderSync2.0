@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.IO;
 
-namespace Foldersync_2._0
+namespace Foldersync
 {
     class Logger
     {

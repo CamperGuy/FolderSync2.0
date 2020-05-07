@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Foldersync_2._0
+namespace Foldersync
 {
     abstract class FolderSync
     {
@@ -12,10 +12,12 @@ namespace Foldersync_2._0
         private static MenuHandler menuHandler;
         static void Main(string[] args)
         {
-            consoleSetup();
             // Parser.writeXML();
+            
+            consoleSetup();
             menuHandler = new MenuHandler();
             menuHandler.loadMainMenu();
+            
         }
 
         private static void consoleSetup()

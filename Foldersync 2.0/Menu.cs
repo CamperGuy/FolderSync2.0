@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Linq.Expressions;
 
-namespace Foldersync_2._0
+namespace Foldersync
 {
     class Menu
     {

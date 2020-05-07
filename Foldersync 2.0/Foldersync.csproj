@@ -6,8 +6,8 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{75ED39E1-EC5B-44E7-A98C-E803A5841EDB}</ProjectGuid>
     <OutputType>Exe</OutputType>
-    <RootNamespace>Foldersync_2._0</RootNamespace>
-    <AssemblyName>Foldersync 2.0</AssemblyName>
+    <RootNamespace>Foldersync</RootNamespace>
+    <AssemblyName>Foldersync</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -34,7 +34,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>Icon.ico</ApplicationIcon>
+    <ApplicationIcon>Foldersync_Icon.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Renci.SshNet, Version=2016.1.0.0, Culture=neutral, PublicKeyToken=1cee9f8bde3db106, processorArchitecture=MSIL">
@@ -50,12 +50,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="NaryTree.cs" />
+    <Compile Include="NaryTreeNode.cs" />
     <Compile Include="WindowsConnection.cs" />
     <Compile Include="ConnectionManager.cs" />
     <Compile Include="ConnectionPair.cs" />
     <Compile Include="MenuEntry.cs" />
     <Compile Include="FileProperties.cs" />
-    <Compile Include="FolderSync.cs" />
+    <Compile Include="Foldersync.cs" />
     <Compile Include="Logger.cs" />
     <Compile Include="Menu.cs" />
     <Compile Include="MenuHandler.cs" />
@@ -68,7 +70,7 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Icon.ico" />
+    <Content Include="Foldersync_Icon.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

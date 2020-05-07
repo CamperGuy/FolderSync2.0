@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using System.IO;
 using System.Xml;
 
-namespace Foldersync_2._0
+namespace Foldersync
 {
     class Parser
     {
